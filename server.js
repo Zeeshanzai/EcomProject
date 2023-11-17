@@ -1,22 +1,33 @@
-import express  from 'express'
-import colors from 'colors'
-import dotenv from 'dotenv'
+import express from "express";
+import colors from "colors";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import connectDB from "./config/db.js";
 
+// Configure env
+dotenv.config();
 
-const app= express()
-//configurin env since it is in root no path addd 
+// Database config
+connectDB();
 
+// Rest object
+const app = express();
 
+// Middlewares
+app.use(express.json());
+app.use(morgan("dev"));
 
+// Routes
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to ecommerce app</h1>");
+});
 
+// PORT
+const PORT = process.env.PORT || 8081;
 
-app.get("/", (req,res)=>{
-    res.send("<h1>welcome to my ecommerce app</h1>")
-})
-
-const port = process.env.PORT || 8080;
-const devMode = process.env.DEV_MODE || 'development';
-
-app.listen(port,()=>{
-    console.log(`server is running mode ${devMode } on ${port} `.bgCyan.white)
-})
+// Run liste
+app.listen(PORT, () => {
+  console.log(
+    `Server Running on ${process.env.DEV_MODE} mode on port ${PORT}`.bgCyan.white
+  );
+});
